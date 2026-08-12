@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ink text-slate-100 font-display;
+    background-image:
+      radial-gradient(at 20% 20%, rgba(34, 211, 238, 0.08) 0, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(232, 121, 249, 0.06) 0, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(251, 191, 36, 0.04) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { @apply bg-slate-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-slate-700 rounded; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-slate-600; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-magenta-500
+           text-slate-950 font-semibold hover:from-cyan-400 hover:to-magenta-400
+           transition shadow-lg shadow-cyan-500/20;
+  }
+  .btn-ghost {
+    @apply px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500
+           text-slate-300 hover:text-slate-100 transition;
+  }
+  .input-base {
+    @apply w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2
+           text-slate-100 placeholder-slate-500 focus:outline-none
+           focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500;
+  }
+  .panel {
+    @apply bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl p-4;
+  }
+  .neon-text {
+    @apply bg-gradient-to-r from-cyan-300 via-cyan-400 to-magenta-400
+           bg-clip-text text-transparent;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs
+           bg-slate-800 border border-slate-700;
+  }
+}
