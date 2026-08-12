@@ -1,8 +1,9 @@
 /**
  * Wan2GP Movie Maker — main App
  *
- * Single-page React UI for orchestrating multi-scene anime episodes
- * with character and story consistency, backed by the wan2gp-mcp server.
+ * Single-page React UI for directing multi-scene videos (TV, film, anime,
+ * shorts, ads, music videos, documentaries, anything) with character and
+ * scene consistency, backed by the wan2gp-mcp server.
  *
  * Layout:
  *   ┌─ Top bar: project name + MCP endpoint status
@@ -77,6 +78,9 @@ export default function App() {
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold neon-text">Wan2GP Movie Maker</h1>
           <span className="text-slate-500 text-sm">/ {project.title || 'Untitled'}</span>
+          <span className="text-xs text-slate-600 ml-2">
+            direct any kind of scene-based video
+          </span>
         </div>
         <div className="flex items-center gap-3">
           <input

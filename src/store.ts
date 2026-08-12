@@ -102,75 +102,125 @@ type Store = {
 };
 
 const DEFAULT_BIBLE: StoryBible = {
-  title: 'New Anime Project',
+  title: 'New Project',
   logline: '',
   setting: '',
   plotArcs: '',
-  visualStyle: '90s cel-animated anime, hand-drawn linework, screen-tone shading',
+  visualStyle: '',
   audioStyle: '',
 };
 
+/**
+ * Style presets — preset visual / audio / character flavor so a new
+ * project starts somewhere sensible without locking the user into
+ * anime. Pick a preset from the UI, then customize from there.
+ */
+export type StylePreset = {
+  id: string;
+  label: string;
+  description: string;
+  visualStyle: string;
+  audioStyle: string;
+  characterFlavor: string;
+};
+
+export const STYLE_PRESETS: StylePreset[] = [
+  {
+    id: 'anime',
+    label: '90s Anime',
+    description: 'Cel-animated, hand-drawn linework, screen-tone shading, dramatic speed lines.',
+    visualStyle: '90s cel-animated anime, hand-drawn linework, screen-tone shading, dramatic speed lines',
+    audioStyle: 'Synthwave + orchestral shonen hybrid',
+    characterFlavor: 'Bold colors, expressive eyes, signature poses',
+  },
+  {
+    id: 'realistic-cinematic',
+    label: 'Cinematic Realism',
+    description: 'Live-action cinematic look, natural lighting, shallow depth of field, anamorphic flares.',
+    visualStyle: 'Cinematic live-action, natural lighting, shallow depth of field, anamorphic lens flares, film grain',
+    audioStyle: 'Orchestral score with room tone, location ambience',
+    characterFlavor: 'Real human features, natural skin, subtle micro-expressions',
+  },
+  {
+    id: 'studio-ghibli',
+    label: 'Painterly Fantasy',
+    description: 'Hand-painted backgrounds, soft watercolor palette, gentle character animation.',
+    visualStyle: 'Hand-painted watercolor backgrounds, soft palette, gentle character animation, storybook lighting',
+    audioStyle: 'Orchestral with acoustic instruments, gentle woodwinds',
+    characterFlavor: 'Soft features, expressive eyes, simple iconic outfits',
+  },
+  {
+    id: 'cyberpunk',
+    label: 'Cyberpunk Noir',
+    description: 'Neon-drenched streets, rain, high-contrast lighting, chrome and chrome and chrome.',
+    visualStyle: 'Neon-drenched cyberpunk, rain-slick streets, high-contrast noir lighting, volumetric fog',
+    audioStyle: 'Synth-heavy score, rain ambience, distant city hum',
+    characterFlavor: 'Cybernetic implants, leather + chrome, moody color palette',
+  },
+  {
+    id: 'documentary',
+    label: 'Documentary',
+    description: 'Hand-held camera feel, natural light, real-world locations, talking-head framing.',
+    visualStyle: 'Documentary cinematography, hand-held or steadicam, natural light, real locations',
+    audioStyle: 'Natural ambience, diegetic sound, interview mic clarity',
+    characterFlavor: 'Real people, period-accurate clothing, expressive hands',
+  },
+  {
+    id: 'commercial',
+    label: 'Commercial / Brand',
+    description: 'Polished product shots, clean studio lighting, slow-motion hero moments.',
+    visualStyle: 'Polished commercial photography, clean studio lighting, slow motion hero shots, color-graded',
+    audioStyle: 'Modern pop score with uplifting builds, branded sting at the end',
+    characterFlavor: 'Aspirational talent, on-brand wardrobe, expressive but restrained',
+  },
+  {
+    id: 'horror',
+    label: 'Horror',
+    description: 'Cold lighting, deep shadows, desaturated palette, asymmetric framing.',
+    visualStyle: 'Cold desaturated palette, deep shadows, off-kilter framing, low-key lighting',
+    audioStyle: 'Drones, sparse strings, sharp stingers on reveals',
+    characterFlavor: 'Flinch reactions, breath visible, clothing damp or torn',
+  },
+  {
+    id: 'scifi',
+    label: 'Sci-Fi / Hard Tech',
+    description: 'Hard-surface mechs, transparent HUDs, volumetric space lighting, design-forward.',
+    visualStyle: 'Hard-surface sci-fi, transparent HUD overlays, volumetric space lighting, design-forward',
+    audioStyle: 'Hybrid orchestral + electronic, mechanical whirs, deep sub',
+    characterFlavor: 'Tech-integrated outfits, utilitarian, weathered details',
+  },
+  {
+    id: 'music-video',
+    label: 'Music Video',
+    description: 'Stylized color grade, beat-locked cuts, expression-heavy close-ups.',
+    visualStyle: 'Stylized color grade, beat-locked editing cues, expression-heavy close-ups',
+    audioStyle: 'Per-track — leave tempo / mood notes here',
+    characterFlavor: 'Wardrobe switches between setups, exaggerated gesture',
+  },
+  {
+    id: 'kids',
+    label: 'Kids / Family',
+    description: 'Bright primary palette, soft rounded shapes, friendly character proportions.',
+    visualStyle: 'Bright primary palette, soft rounded shapes, friendly proportions, minimal grit',
+    audioStyle: 'Light orchestral, percussion, character voices',
+    characterFlavor: 'Big eyes, friendly faces, bold simple outfits',
+  },
+];
+
 const SAMPLE_PROJECT: Project = {
   id: 'sample',
-  title: 'Our Adventures — Episode 01',
+  title: 'Sample Project — try the presets',
   bible: {
-    ...DEFAULT_BIBLE,
-    title: 'Our Adventures — Episode 01',
-    logline:
-      'A 17-year-old hacker, an AI agent, and a chrome-masked runner take on the glitch-riding villain Grok above the neon-lit Neo-Dayton skyline.',
-    setting:
-      'Neo-Dayton — a near-future midwestern American city built on top of the old one, with floating sky-towers, anti-gravity highways, and anti-cybercrime agencies operating out of repurposed malls.',
-    plotArcs: [
-      'Act 1 (0:00–1:00): Awakening. Hermes materializes in a hidden server room. Duckets takes the call. The Phantom Duck drops out of orbit. Cockpit + title card.',
-      'Act 2 (1:00–2:00): First Encounter. Grok reveals himself. Aerial dogfight. Hermes firewall. Wing-surface duel.',
-      'Act 3 (2:00–3:00): Victory & Teaser. ChatGPT portals in to help. Triple-team critical strike. Sunset pose on the wing. The Blue Flame appears.',
-    ].join('\n\n'),
-    audioStyle:
-      'Synthwave + orchestral shonen hybrid. Punchy brass on critical hits, lo-fi ambient during quiet beats.',
+    title: 'Sample Project — try the presets',
+    logline: 'Pick a style preset from the Story Bible panel to start. ' +
+             'Then lock your cast and write the first scene.',
+    setting: 'Whatever world you want to build.',
+    plotArcs: '',
+    visualStyle: 'No style preset selected yet — pick one in the Story Bible panel.',
+    audioStyle: '',
   },
-  characters: [
-    {
-      id: 'char-duckets',
-      name: 'Duckets',
-      description:
-        '17-year-old masculine protagonist. Messy dark blue hair fading to teal at the tips. Glowing teal eyes with scanlines. Lean athletic build. High-collared black jacket with circuit-trace embroidery. Fingerless gloves. Cargo pants. Glowing teal headphones around his neck. Signature pose: one hand on hip, the other pointing forward.',
-      color: '#22d3ee',
-    },
-    {
-      id: 'char-hermes',
-      name: 'Hermes',
-      description:
-        'Tall androgynous figure. Long white hair in a high ponytail. Piercing gold eyes. Fitted white and teal trench coat with shifting holographic glyphs along the hem. No weapons. Code-shaped magic circles materialize around his hands.',
-      color: '#fbbf24',
-    },
-    {
-      id: 'char-local-ai',
-      name: 'Local AI',
-      description:
-        'Compact gender-neutral athlete. Featureless chrome face-plate mask with two horizontal cyan optic slits. Matte black combat suit with electric blue circuit traces. Dual short energy daggers.',
-      color: '#60a5fa',
-    },
-    {
-      id: 'char-grok',
-      name: 'Grok',
-      description:
-        'Tall lean sharp-jawed masculine villain. Slicked-back white hair. Long black leather trench coat with glowing red X-shaped circuitry. Crimson red optic visor. Cybernetic shoulder pauldrons. Twin curved energy blades crackling red arcs.',
-      color: '#f87171',
-    },
-  ],
-  scenes: [
-    {
-      id: 'scene-01',
-      number: 1,
-      title: 'Cold open — Hermes materializes',
-      duration: 15,
-      prompt:
-        'Cinematic anime cold open. A pulsing blue energy sphere hovers above a crystalline pedestal in a hidden underground server chamber lined with abandoned CRT monitors and cables. From the sphere EXTRUDES Hermes: tall androgynous protagonist, long white hair in a high ponytail, piercing gold eyes, fitted white and teal trench coat with shifting holographic glyphs. He stands, coat settling, scanning the room with a slight smile. Cinematic anime, 90s cel-animated, dramatic rim lighting, teal and midnight blue palette.',
-      characterRefs: ['char-hermes'],
-      notes: 'Airlock beat at end.',
-      architecture: 'minimax_h3_ref2va_pruned',
-    },
-  ],
+  characters: [],
+  scenes: [],
   createdAt: Date.now(),
   updatedAt: Date.now(),
 };
@@ -276,7 +326,7 @@ export const useStore = create<Store>()(
         set({
           project: {
             id: uid(),
-            title: 'New Anime Project',
+            title: 'New Project',
             bible: DEFAULT_BIBLE,
             characters: [],
             scenes: [],

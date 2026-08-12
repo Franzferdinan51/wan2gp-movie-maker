@@ -1,9 +1,9 @@
 {
   "name": "wan2gp-movie-maker",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "description": "WebUI for building multi-scene anime TV episodes and movies with character and story consistency",
+    "private": true,
+    "version": "0.1.0",
+    "type": "module",
+    "description": "WebUI for directing multi-scene videos (TV, films, shorts, ads, music videos, anime, documentaries) with character and scene consistency, powered by MiniMax H3 via the wan2gp-mcp server.",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
