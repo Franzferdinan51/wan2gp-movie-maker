@@ -2,6 +2,20 @@
 
 All notable changes to the Movie Maker WebUI.
 
+## 2026-08-20
+
+- **Daily improver run** — automated cron check.
+
+- **MCP drift detected:**
+    server tools (14): ['h3_status', 'h3_generate', 'h3_job_status', 'h3_list_jobs', 'h3_get_output', 'h3_get_video']...
+    webui calls (4): ['h3_cancel_job', 'h3_generate', 'h3_get_output', 'h3_job_status']
+    ⚠ server tools not used by webui: ['h3_get_audio', 'h3_get_default_settings', 'h3_get_video', 'h3_get_video_chunked', 'h3_list_jobs', 'h3_list_outputs', 'h3_post_to_webhook', 'h3_save_to_path', 'h3_send_to_telegram', 'h3_status']
+
+- **npm outdated:** 4 outdated: ['@modelcontextprotocol/sdk', 'react', 'react-dom', 'zustand']
+
+- **README freshness:** 8.0 days old
+
+
 ## 2026-08-19
 
 - **Daily improver run** — automated cron check.
