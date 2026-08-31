@@ -120,7 +120,7 @@ export default function App() {
         <section className="flex flex-col gap-4 overflow-y-auto pr-1">
           {scene ? (
             <>
-              <ScenePanel scene={scene} />
+              <ScenePanel scene={scene} client={client} />
               <StoryboardPanel scene={scene} />
             </>
           ) : (

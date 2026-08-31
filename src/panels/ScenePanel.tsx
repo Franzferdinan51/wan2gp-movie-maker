@@ -1,9 +1,11 @@
 /**
  * Scene editor — title, duration, prompt, character refs, architecture.
+ * Renders the finished video inline once a muxedPath is available.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore, type Scene } from '../store';
+import { McpClient, h3GetVideo, type H3GetVideoResult } from '../mcp-client';
 
 const ARCHITECTURES = [
   { value: 'minimax_h3_ref2va_pruned', label: 'H3 Ref2VA — Pruned 20B (recommended)' },
@@ -11,9 +13,39 @@ const ARCHITECTURES = [
   { value: 'minimax_h3_fl2va_pruned', label: 'H3 FL2VA — Pruned (text-only)' },
 ];
 
-export function ScenePanel({ scene }: { scene: Scene }) {
+export function ScenePanel({ scene, client }: { scene: Scene; client: McpClient | null }) {
   const updateScene = useStore((s) => s.updateScene);
   const characters = useStore((s) => s.project.characters);
+  const [video, setVideo] = useState<H3GetVideoResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // When a scene finishes, fetch the rendered video via h3_get_video and
+  // keep the base64 around for inline <video> playback. The base64 can be
+  // megabytes; that's why we only fetch on demand and reset when the path
+  // changes. Refresh on demand via the "Reload preview" button.
+  useEffect(() => {
+    setVideo(null);
+    setError(null);
+    if (!scene.muxedPath || !client) return;
+    let cancelled = false;
+    setLoading(true);
+    h3GetVideo(client, scene.muxedPath)
+      .then((v) => {
+        if (cancelled) return;
+        setVideo(v);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setError(e?.message ?? String(e));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [scene.muxedPath, client]);
 
   const toggleCharacter = (id: string) => {
     const has = scene.characterRefs.includes(id);
@@ -159,8 +191,46 @@ export function ScenePanel({ scene }: { scene: Scene }) {
       </div>
 
       {scene.muxedPath && (
-        <div className="mt-3 text-xs text-emerald-300 font-mono">
-          ✓ rendered: {scene.muxedPath}
+        <div className="mt-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-emerald-300 font-mono">
+              ✓ rendered: {scene.muxedPath}
+            </span>
+            <button
+              type="button"
+              className="chip text-xs hover:border-cyan-400"
+              disabled={!client || loading}
+              onClick={() => {
+                if (!client || !scene.muxedPath) return;
+                setLoading(true);
+                setError(null);
+                h3GetVideo(client, scene.muxedPath)
+                  .then((v) => setVideo(v))
+                  .catch((e) => setError(e?.message ?? String(e)))
+                  .finally(() => setLoading(false));
+              }}
+            >
+              {loading ? 'loading…' : 'Reload preview'}
+            </button>
+          </div>
+          {error && (
+            <div className="text-xs text-rose-300 font-mono mb-2">
+              preview error: {error}
+            </div>
+          )}
+          {video && (
+            <video
+              key={scene.muxedPath}
+              controls
+              loop
+              muted
+              className="w-full rounded border border-slate-800 bg-black"
+              src={`data:${video.content?.[0]?.mimeType ?? 'video/mp4'};base64,${video.base64 ?? video.content?.[0]?.data ?? ''}`}
+            />
+          )}
+          {!video && !loading && !error && (
+            <div className="text-xs text-slate-500 italic">No preview loaded.</div>
+          )}
         </div>
       )}
       {scene.error && (
